@@ -15,8 +15,6 @@ builds:
       - windows_amd64
 archives:
   - format: binary
-  - builds:
-      - dhrate
     name_template: "{{ .Binary }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
 checksum:
   algorithm: sha256
