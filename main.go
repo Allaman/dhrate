@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"time"
 
 	"github.com/alecthomas/kong"
 	"github.com/tidwall/gjson"
@@ -26,6 +27,20 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+}
+
+func rate() error {
+	client := http.Client{Timeout: time.Duration(2) * time.Second}
+	token, err := getToken(&client)
+	if err != nil {
+		return err
+	}
+	limit, err := getRateLimit(&client, token)
+	if err != nil {
+		return err
+	}
+	fmt.Println(limit)
+	return nil
 }
 
 // getRateLimit returns the value of the headers 'ratelimit-limit' and 'ratelimit-remaining' as string

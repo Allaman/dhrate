@@ -2,8 +2,6 @@ package main
 
 import (
 	"fmt"
-	"net/http"
-	"time"
 )
 
 type CLI struct {
@@ -23,15 +21,5 @@ func (c *versionCmd) Run() error {
 type rateCmd struct{}
 
 func (c *rateCmd) Run() error {
-	client := http.Client{Timeout: time.Duration(2) * time.Second}
-	token, err := getToken(&client)
-	if err != nil {
-		return err
-	}
-	limit, err := getRateLimit(&client, token)
-	if err != nil {
-		return err
-	}
-	fmt.Println(limit)
-	return nil
+	return rate()
 }
