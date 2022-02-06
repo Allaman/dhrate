@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"time"
 
+	"github.com/alecthomas/kong"
 	"github.com/tidwall/gjson"
 )
 
@@ -15,17 +15,17 @@ const (
 	RATELIMIT_URL = "https://registry-1.docker.io/v2/ratelimitpreview/test/manifests/latest"
 )
 
+var Version = "dev"
+
 func main() {
-	c := http.Client{Timeout: time.Duration(2) * time.Second}
-	token, err := getToken(&c)
+	cli := CLI{}
+	ctx := kong.Parse(&cli,
+		kong.Name("dhrate"),
+		kong.Description("Get your current Dockerhub rate"))
+	err := ctx.Run()
 	if err != nil {
 		panic(err)
 	}
-	limit, err := getRateLimit(&c, token)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(limit)
 }
 
 // getRateLimit returns the value of the headers 'ratelimit-limit' and 'ratelimit-remaining' as string
