@@ -2,6 +2,12 @@
 
 [Latest release](https://github.com/allaman/dhrate/releases/latest))
 
+## 0.0.7
+
+### Changelog
+
+- set `rate` command as default command
+
 ## 0.0.6
 
 ### Changelog
