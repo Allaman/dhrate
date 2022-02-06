@@ -13,7 +13,6 @@ builds:
       - linux_arm64
       - linux_arm
       - windows_amd64
-    gobinary: "go1.17.4"
 archives:
   - builds:
       - dhrate
