@@ -42,7 +42,7 @@ func getRateLimit(c *http.Client, token string) (string, error) {
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode == 200 {
-		return fmt.Sprintf("%s (rate limit)\n%s (rate limit remaining)", resp.Header.Get("ratelimit-limit"), resp.Header.Get("ratelimit-remaining")), nil
+		return fmt.Sprintf("{\"rate limit\": \"%s\",\n\"rate limit remaining\": \"%s\"}", resp.Header.Get("ratelimit-limit"), resp.Header.Get("ratelimit-remaining")), nil
 	} else {
 		fmt.Printf("Status is: %s\n", resp.Status)
 		return "", errors.New("error while getting token")
