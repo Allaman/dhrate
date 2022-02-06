@@ -5,12 +5,15 @@ builds:
   - binary: dhrate
     id: dhrate
     main: ./
+    ldflags:
+      - -X main.VERSION={{ .Version }}
     targets:
       - darwin_amd64
       - linux_amd64
       - linux_arm64
       - linux_arm
       - windows_amd64
+    gobinary: "go1.17.4"
 archives:
   - builds:
       - dhrate
@@ -22,11 +25,12 @@ changelog:
   filters:
     exclude:
       - "^docs:"
+      - "^ci:"
 release:
-  name_template: "{{ .ProjectName }}-v{{ .Version }}"
+  name_template: "{{ .ProjectName }}-{{ .Version }}"
   header: |
-    ## v{{ .Version }} ({{ .Date }})
-    New v{{ .Version }} release!
+    ## {{ .Version }} ({{ .Date }})
+    New {{ .Version }} release!
   footer: |
     ## Release Notes
     Please read the [RELEASE_NOTES](https://github.com/allaman/dhrate/blob/master/RELEASE-NOTES.md) which contain among other things important information for who is upgrading from previous releases.
