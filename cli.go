@@ -6,7 +6,7 @@ import (
 
 type CLI struct {
 	Version versionCmd `cmd:"" help:"Show version information"`
-	Rate    rateCmd    `cmd:"" help:"Get current Dockerhub rate"`
+	Rate    rateCmd    `cmd:"" default:"1" help:"Get current Dockerhub rate (default command)"`
 }
 
 type versionCmd struct {
