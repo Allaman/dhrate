@@ -2,6 +2,12 @@
 
 [Latest release](https://github.com/allaman/dhrate/releases/latest))
 
+## 0.0.5
+
+### Changelog
+
+- format to json output
+
 ## 0.0.4
 
 ### Changelog
