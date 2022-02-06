@@ -6,7 +6,7 @@ builds:
     id: dhrate
     main: ./
     ldflags:
-      - -X main.VERSION={{ .Version }}
+      - -X main.Version={{ .Version }}
     targets:
       - darwin_amd64
       - darwin_arm64
@@ -14,9 +14,10 @@ builds:
       - linux_arm64
       - windows_amd64
 archives:
+  - format: binary
   - builds:
       - dhrate
-    name_template: "dhrate-{{ .Version }}-{{ .Os }}-{{ .Arch }}"
+    name_template: "{{ .Binary }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
 checksum:
   algorithm: sha256
 changelog:
