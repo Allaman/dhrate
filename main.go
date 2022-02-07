@@ -1,14 +1,10 @@
 package main
 
 import (
-	"errors"
 	"fmt"
-	"io"
-	"net/http"
-	"time"
+	"log"
 
 	"github.com/alecthomas/kong"
-	"github.com/tidwall/gjson"
 )
 
 const (
@@ -16,6 +12,7 @@ const (
 	RATELIMIT_URL = "https://registry-1.docker.io/v2/ratelimitpreview/test/manifests/latest"
 )
 
+// will be overwritten in release pipeline
 var Version = "dev"
 
 func main() {
@@ -25,65 +22,21 @@ func main() {
 		kong.Description("Get your current Dockerhub rate"))
 	err := ctx.Run()
 	if err != nil {
-		panic(err)
+		log.Fatalln(err)
 	}
 }
 
+// rate prints Dockerhub rate limits to stdout
 func rate() error {
-	client := http.Client{Timeout: time.Duration(2) * time.Second}
-	token, err := getToken(&client)
+	client := createClient()
+	dockerHubClientToken, err := client.getClientToken()
 	if err != nil {
 		return err
 	}
-	limit, err := getRateLimit(&client, token)
+	limit, err := client.getRateLimit(dockerHubClientToken)
 	if err != nil {
 		return err
 	}
 	fmt.Println(limit)
 	return nil
-}
-
-// getRateLimit returns the value of the headers 'ratelimit-limit' and 'ratelimit-remaining' as string
-func getRateLimit(c *http.Client, token string) (string, error) {
-	var bearer = "Bearer " + token
-	req, err := http.NewRequest("HEAD", RATELIMIT_URL, nil)
-	if err != nil {
-		return "", errors.New("error while creating request")
-	}
-	req.Header.Add("Authorization", bearer)
-	resp, err := c.Do(req)
-	if err != nil {
-		return "", errors.New("error while requesting rate limit")
-	}
-	defer resp.Body.Close()
-	if resp.StatusCode == 200 {
-		return fmt.Sprintf("{\"rate limit\": \"%s\",\n\"rate limit remaining\": \"%s\"}", resp.Header.Get("ratelimit-limit"), resp.Header.Get("ratelimit-remaining")), nil
-	} else {
-		fmt.Printf("Status is: %s\n", resp.Status)
-		return "", errors.New("error while getting token")
-	}
-}
-
-// getToken returns a token as string for an unauthenticated user
-func getToken(c *http.Client) (string, error) {
-	resp, err := c.Get(TOKEN_URL)
-	if err != nil {
-		panic(err)
-	}
-	defer resp.Body.Close()
-	if resp.StatusCode == 200 {
-		b, err := io.ReadAll(resp.Body)
-		if err != nil {
-			return "", errors.New("error while parsing body")
-		}
-		return getKey(string(b), "token"), nil
-	} else {
-		fmt.Printf("Status is: %s\n", resp.Status)
-		return "", errors.New("error while getting token")
-	}
-}
-
-// getKey returns the key of a json as string
-func getKey(json string, key string) string {
-	return gjson.Get(json, key).String()
 }

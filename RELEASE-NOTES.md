@@ -2,6 +2,14 @@
 
 [Latest release](https://github.com/allaman/dhrate/releases/latest))
 
+## 0.0.8
+
+### Changelog
+
+- better naming for some variables
+- refactor functions to methods
+- add client.go for client functionality
+
 ## 0.0.7
 
 ### Changelog
