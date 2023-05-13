@@ -2,6 +2,13 @@
 
 [Latest release](https://github.com/allaman/dhrate/releases/latest))
 
+## 0.0.9
+
+### Changelog
+
+- update to Go 1.20
+- update dependencies
+
 ## 0.0.8
 
 ### Changelog
